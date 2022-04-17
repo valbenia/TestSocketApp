@@ -2,68 +2,50 @@ using System;
 using System.Net; // để sử dụng lớp IPAddress, IPEndPoint
 using System.Net.Sockets; // để sử dụng lớp Socket
 using System.Text; // để sử dụng lớp Encoding
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace ClientUDP
 {
+    class TemplateJsonObject
+    {
+        public List<int> position;
+        public List<int> rotation;
+        public List<int> scale;
+    }
     internal class ClientUDP
     {
         private static IPAddress serverIp = IPAddress.Parse("127.0.0.1");
         private static int serverPort = 1108;
-        private static void Main(string[] args)
+
+        private static int size = 1024;
+        static void Main(string[] args)
         {
-            Console.Title = "Udp Client";
-
-            // đây là "địa chỉ" của tiến trình server trên mạng
-            // mỗi endpoint chứa ip của host và port của tiến trình
-            var serverEndpoint = new IPEndPoint(serverIp, serverPort);            
-
-            var size = 4096; // kích thước của bộ đệm
-            var receiveBuffer = new byte[size]; // mảng byte làm bộ đệm            
-            var socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
-            string text = "";
-            do
-            {
-                // yêu cầu người dùng nhập một chuỗi
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("# Text >>> ");
-                Console.ResetColor();
-                text = Console.ReadLine();
-
-                // biến đổi chuỗi thành mảng byte
-                var sendBuffer = Encoding.ASCII.GetBytes(text);
-                Console.Write("# sendBuffer >>> ");
-
-                // gửi mảng byte trên đến tiến trình server
-                socket.SendTo(sendBuffer, serverEndpoint);
-                Console.Write("# send socket >>> ");
-
-                // endpoint này chỉ dùng khi nhận dữ liệu
-                EndPoint dummyEndpoint = new IPEndPoint(IPAddress.Any, 0);
-                Console.Write("# Tao dummyEndpoint >>> ");
-
-                // nhận mảng byte từ dịch vụ Udp và lưu vào bộ đệm
-                // biến dummyEndpoint có nhiệm vụ lưu lại địa chỉ của tiến trình nguồn
-                // tuy nhiên, ở đây chúng ta đã biết tiến trình nguồn là Server
-                // do đó dummyEndpoint không có giá trị sử dụng 
-
-                var length = socket.ReceiveFrom(receiveBuffer, ref dummyEndpoint);
-                Console.Write("# Tao length >>> ");
-
-                // chuyển đổi mảng byte về chuỗi
-                var result = Encoding.ASCII.GetString(receiveBuffer, 0, length);
-                Console.Write("# result >>> " + result.ToString());
-
-                // xóa bộ đệm (để lần sau sử dụng cho yên tâm)
-                Array.Clear(receiveBuffer, 0, size);
-
-
-
-                // in kết quả ra màn hình
-                Console.WriteLine("Result: " + result.ToString());
-            } while (text.Equals("\\q"));
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            var receiveBuffer = new byte[size];
             
-            // đóng socket và giải phóng tài nguyên
-            socket.Close();
+            String text = "{\"position\":[0,0,0],\"rotation\":[1,1,1],\"scale\":[2,2,2]}";
+            byte[] sendbuf = Encoding.ASCII.GetBytes(text);
+            IPEndPoint ep = new IPEndPoint(serverIp, serverPort);
+            socket.SendTo(sendbuf, ep);
+            Console.WriteLine("Message sent to the broadcast address: " + text);
+
+            EndPoint dummyEndpoint = new IPEndPoint(IPAddress.Any, 0);
+            int receiveBuf = socket.ReceiveFrom(receiveBuffer, ref dummyEndpoint);
+            string recText = Encoding.ASCII.GetString(receiveBuffer, 0, receiveBuf);
+            Console.WriteLine("Receive: " + recText);
+
+            // string to JObject
+            JObject json = JObject.Parse(recText);
+            Console.WriteLine("Convert from string to Json: " + json.ToString());
+
+            // JObject to Object (type TemplateJsonObject)
+            TemplateJsonObject test = json.ToObject<TemplateJsonObject>();
+            Console.WriteLine("Convert from Json to Object : " + test.rotation[1]);
+            
+            //Object (type TemplateJsonObject) to JObject
+            JObject obj2json = JObject.FromObject(test);
+            Console.WriteLine("Convert from Object to Json: " + obj2json.ToString());
         }
     }
 }
