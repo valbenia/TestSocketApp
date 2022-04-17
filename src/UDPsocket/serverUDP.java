@@ -2,6 +2,7 @@ package UDPsocket;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Arrays;
 public class serverUDP {
 
     public static void main(String args[]) throws Exception {
@@ -18,7 +19,7 @@ public class serverUDP {
                     new DatagramPacket(receiveData, receiveData.length);
             //nhận gói tin qua phương thức receive()
             serverSocket.receive(receivePacket);
-            receiveData.clear();
+            // receiveData.clear();            
             //Chuyển dữ liệu vừa nhận về dạng String
             String sentence = new String(receivePacket.getData());
             System.out.println("receivePacket: " + sentence + "\t length: " + sentence.length());
@@ -36,7 +37,9 @@ public class serverUDP {
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
             //Gửi gói tin đi
             serverSocket.send(sendPacket);
-            sendData.clear();
+            // sendData.clear();
+            Arrays.fill(receiveData, (byte)0);
+            Arrays.fill(sendData, (byte)0);
         }
     }
 }
