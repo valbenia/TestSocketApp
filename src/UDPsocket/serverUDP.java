@@ -18,6 +18,7 @@ public class serverUDP {
                     new DatagramPacket(receiveData, receiveData.length);
             //nhận gói tin qua phương thức receive()
             serverSocket.receive(receivePacket);
+            receiveData.clear();
             //Chuyển dữ liệu vừa nhận về dạng String
             String sentence = new String(receivePacket.getData());
             System.out.println("receivePacket: " + sentence + "\t length: " + sentence.length());
@@ -35,6 +36,7 @@ public class serverUDP {
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
             //Gửi gói tin đi
             serverSocket.send(sendPacket);
+            sendData.clear();
         }
     }
 }
