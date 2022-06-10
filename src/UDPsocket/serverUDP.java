@@ -17,20 +17,20 @@ public class serverUDP {
 	static HashMap<String, UserData> data;
 	static ObjectMapper obj;
 	static DatagramSocket serverSocket;
+	static byte[] sendData;
 
     public static void main(String args[]) throws Exception {
     	DatagramPacket sendPacket;
     	DatagramPacket receivePacket;
     	data = new HashMap<String, UserData>();
     	obj = new ObjectMapper();
-    	
         //Tạo socket phía server với số hiệu cổng 1108
         serverSocket = new DatagramSocket(2222);
         System.out.println("Binding on port: 2222");
         //tạo biến receiveData để nhận dữ liệu từ gói tin đến
         byte[] receiveData = new byte[1024];
         //tạo sendData để nhận dữ liệu gửi lên gói tin đi
-        byte[] sendData  = new byte[1024];
+        sendData  = new byte[1024];
         
         
         receivePacket = new DatagramPacket(receiveData, receiveData.length);
@@ -42,7 +42,7 @@ public class serverUDP {
             
             //Chuyển dữ liệu vừa nhận về dạng String
             String sentence = new String(receivePacket.getData());
-            receiveMessage(sentence);
+            receiveMessage(sentence, receiveData);
           
             //Lấy địa chỉ IP của bên gửi
             InetAddress IPAddress = receivePacket.getAddress();
@@ -51,7 +51,7 @@ public class serverUDP {
             
             //Xử lý dữ liệu vừa nhận
             String sentence_to_client = sentence;
-            sendToClient(IPAddress, port, sendData);
+            sendToClient(IPAddress, port);
             
             //clear Data;
             Arrays.fill(receiveData, (byte)0);
@@ -59,8 +59,9 @@ public class serverUDP {
         }
     }
 
-	private static void sendToClient(InetAddress iPAddress, int port, byte[] sendData) {
+ 	private static void sendToClient(InetAddress iPAddress, int port) {
 		try {
+			Arrays.fill(sendData, (byte)0 );
 			sendData = obj.writeValueAsBytes(data);
 			serverSocket.send(new DatagramPacket(sendData, sendData.length, iPAddress, port));
 			System.out.println("Sending data: " + data.toString());
@@ -74,11 +75,12 @@ public class serverUDP {
 		}
 	}
 
-	private static void receiveMessage(String sentence) {
+	private static void receiveMessage(String sentence, byte[] receiveData) {
 		try {
 			UserData userData = obj.readValue(sentence, UserData.class);
-			data.put(userData.getClientID(), userData);
-			System.out.print("receiveMessage: " + sentence);
+			data.put(userData.clientID, userData);
+//			System.out.print("receiveMessage: " + data);
+			Arrays.fill(receiveData, (byte)0);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
