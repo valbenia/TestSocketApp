@@ -6,18 +6,19 @@ import java.net.InetAddress;
 
 public class MulticastSender {
 
-    public static final String GROUP_ADDRESS = "127.0.0.1";
-    public static final int PORT = 1108;
+    public static final String GROUP_ADDRESS = "172.31.45.174";
+    public static final int PORT = 7766;
 
     public static void main(String[] args) throws InterruptedException {
         DatagramSocket socket = null;
         try {
             // Get the address that we are going to connect to.
             InetAddress address = InetAddress.getByName(GROUP_ADDRESS);
+         
 
             // Create a new Multicast socket
             socket = new DatagramSocket();
-
+            
             DatagramPacket outPacket = null;
             long counter = 0;
             while (true) {
