@@ -1,0 +1,15 @@
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/bin/Debug/net5.0/csCode.deps.json
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/bin/Debug/net5.0/csCode.runtimeconfig.json
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/bin/Debug/net5.0/csCode.runtimeconfig.dev.json
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/bin/Debug/net5.0/csCode.dll
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/bin/Debug/net5.0/ref/csCode.dll
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/bin/Debug/net5.0/csCode.pdb
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/obj/Debug/net5.0/csCode.csproj.AssemblyReference.cache
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/obj/Debug/net5.0/csCode.GeneratedMSBuildEditorConfig.editorconfig
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/obj/Debug/net5.0/csCode.AssemblyInfoInputs.cache
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/obj/Debug/net5.0/csCode.AssemblyInfo.cs
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/obj/Debug/net5.0/csCode.csproj.CoreCompileInputs.cache
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/obj/Debug/net5.0/csCode.dll
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/obj/Debug/net5.0/ref/csCode.dll
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/obj/Debug/net5.0/csCode.pdb
+/Users/huynguyen/Documents/spring boot/bkspeed/csCode/obj/Debug/net5.0/csCode.genruntimeconfig.cache
